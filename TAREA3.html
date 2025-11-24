@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de validación - Alberto</title>
+    <link rel="stylesheet" href="estilos_formulario.css">
+</head>
+
+<body>
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="page-wrapper">
+        <main class="form-card">
+            <h1>FORMULARIO</h1>
+
+            <form id="formulario" autocomplete="off" action="#">
+                <div class="field-row">
+                    <label class="field-label" for="email">Email</label>
+                    <div class="field-input">
+                        <input type="text" id="email" name="email" class="campo" placeholder="Ej: pepe@foc.es">
+                    </div>
+                    <button type="button" class="btn-small" onclick="validarEmail()">Validar</button>
+                </div>
+
+                <div class="field-row">
+                    <label class="field-label" for="contrasena">Contraseña</label>
+                    <div class="field-input">
+                        <input type="password" id="contrasena" name="contrasena" class="campo"
+                            placeholder="Ej: Foc12345">
+                    </div>
+                    <button type="button" class="btn-small" onclick="validarContrasena()">Validar</button>
+                </div>
+
+                <div class="field-row">
+                    <label class="field-label" for="usuario">Nombre de usuario</label>
+                    <div class="field-input">
+                        <input type="text" id="usuario" name="usuario" class="campo" placeholder="Ej: ALB">
+                    </div>
+                    <button type="button" class="btn-small" onclick="validarUsuario()">Validar</button>
+                </div>
+
+                <div class="field-row">
+                    <label class="field-label" for="nombre">Nombre y apellidos</label>
+                    <div class="field-input">
+                        <input type="text" id="nombre" name="nombre" class="campo" placeholder="Ej: Alberto Gálvez">
+                    </div>
+                    <button type="button" class="btn-small" onclick="validarNombre()">Validar</button>
+                </div>
+
+                <div class="field-row field-row-buttons">
+                    <button type="button" class="btn-primary" onclick="controlTotal()">
+                        Control total + envío
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="limpiarCampos()">
+                        Limpiar los campos
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <footer>
+        ALBERTO GALVEZ AGUADO 2025
+    </footer>
+
+    <script>
+        function marcarError(campoId) {
+            var input = document.getElementById(campoId);
+            input.className = "campo errores";
+        }
+
+        function limpiarError(campoId) {
+            var input = document.getElementById(campoId);
+            input.className = "campo";
+        }
+
+        function comprobarEmail() {
+            var valor = document.getElementById("email").value.trim();
+            var textoError = "";
+
+            if (valor === "") {
+                textoError = "El email es obligatorio.";
+            } else {
+                var posArroba = valor.indexOf("@");
+                var posPunto = valor.lastIndexOf(".");
+                if (posArroba < 1 || posPunto < posArroba + 2 || posPunto >= valor.length - 1) {
+                    textoError = "El email no tiene un formato válido (ejemplo: pepe@foc.es).";
+                }
+            }
+
+            if (textoError !== "") {
+                marcarError("email");
+                return { ok: false, mensaje: textoError };
+            } else {
+                limpiarError("email");
+                return { ok: true, mensaje: "Email correcto." };
+            }
+        }
+
+        function comprobarContrasena() {
+            var valor = document.getElementById("contrasena").value;
+            var textoError = "";
+
+            if (valor.length < 5) {
+                textoError = "La contraseña debe tener al menos 5 caracteres.";
+            } else {
+                var tieneMayus = /[A-Z]/.test(valor);
+                var tieneMinus = /[a-z]/.test(valor);
+                var tieneNumero = /[0-9]/.test(valor);
+
+                if (!tieneMayus || !tieneMinus || !tieneNumero) {
+                    textoError = "La contraseña debe tener 1 mayúscula, 1 minúscula y 1 número.";
+                }
+            }
+
+            if (textoError !== "") {
+                marcarError("contrasena");
+                return { ok: false, mensaje: textoError };
+            } else {
+                limpiarError("contrasena");
+                return { ok: true, mensaje: "Contraseña correcta." };
+            }
+        }
+
+        function comprobarUsuario() {
+            var valor = document.getElementById("usuario").value.trim();
+            var textoError = "";
+
+            if (valor.length < 3) {
+                textoError = "El nombre de usuario debe tener tres o más caracteres.";
+            }
+
+            if (textoError !== "") {
+                marcarError("usuario");
+                return { ok: false, mensaje: textoError };
+            } else {
+                limpiarError("usuario");
+                return { ok: true, mensaje: "Usuario correcto." };
+            }
+        }
+
+        function comprobarNombre() {
+            var valor = document.getElementById("nombre").value.trim();
+            var textoError = "";
+
+            if (valor === "") {
+                textoError = "El nombre y apellidos son obligatorios.";
+            } else if (valor.indexOf(" ") === -1) {
+                textoError = "Escribe al menos un nombre y un apellido.";
+            }
+
+            if (textoError !== "") {
+                marcarError("nombre");
+                return { ok: false, mensaje: textoError };
+            } else {
+                limpiarError("nombre");
+                return { ok: true, mensaje: "Nombre y apellidos correctos." };
+            }
+        }
+
+        function validarEmail() {
+            var r = comprobarEmail();
+            alert(r.mensaje);
+        }
+
+        function validarContrasena() {
+            var r = comprobarContrasena();
+            alert(r.mensaje);
+        }
+
+        function validarUsuario() {
+            var r = comprobarUsuario();
+            alert(r.mensaje);
+        }
+
+        function validarNombre() {
+            var r = comprobarNombre();
+            alert(r.mensaje);
+        }
+
+        function controlTotal() {
+            var errores = "";
+
+            var rEmail = comprobarEmail();
+            if (!rEmail.ok) errores += "- " + rEmail.mensaje + "\n";
+
+            var rPass = comprobarContrasena();
+            if (!rPass.ok) errores += "- " + rPass.mensaje + "\n";
+
+            var rUser = comprobarUsuario();
+            if (!rUser.ok) errores += "- " + rUser.mensaje + "\n";
+
+            var rNom = comprobarNombre();
+            if (!rNom.ok) errores += "- " + rNom.mensaje + "\n";
+
+            if (errores === "") {
+                alert("Todos los datos son correctos. Formulario listo para enviar.");
+            } else {
+                alert("Se han encontrado los siguientes errores:\n\n" + errores);
+            }
+        }
+
+        function limpiarCampos() {
+            document.getElementById("email").value = "";
+            document.getElementById("contrasena").value = "";
+            document.getElementById("usuario").value = "";
+            document.getElementById("nombre").value = "";
+
+            limpiarError("email");
+            limpiarError("contrasena");
+            limpiarError("usuario");
+            limpiarError("nombre");
+        }
+
+        var canvas = document.getElementById("bgCanvas");
+        var ctx = canvas.getContext("2d");
+        var ancho, alto;
+        var particulas = [];
+        var numParticulas = 120;
+        var raton = { x: null, y: null };
+
+        function redimensionarCanvas() {
+            ancho = canvas.width = window.innerWidth;
+            alto = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener("resize", redimensionarCanvas);
+        redimensionarCanvas();
+
+        function crearParticulas() {
+            particulas = [];
+            for (var i = 0; i < numParticulas; i++) {
+                particulas.push({
+                    x: Math.random() * ancho,
+                    y: Math.random() * alto,
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.6,
+                    radioBase: 1.5 + Math.random() * 1.5
+                });
+            }
+        }
+
+        crearParticulas();
+
+        window.addEventListener("mousemove", function (e) {
+            raton.x = e.clientX;
+            raton.y = e.clientY;
+        });
+
+        window.addEventListener("mouseleave", function () {
+            raton.x = null;
+            raton.y = null;
+        });
+
+        function dibujar() {
+            ctx.clearRect(0, 0, ancho, alto);
+
+            for (var i = 0; i < particulas.length; i++) {
+                var p = particulas[i];
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > ancho) p.vx *= -1;
+                if (p.y < 0 || p.y > alto) p.vy *= -1;
+
+                var radio = p.radioBase;
+                var color = "rgba(255, 255, 255, 0.7)";
+
+                if (raton.x !== null) {
+                    var dx = p.x - raton.x;
+                    var dy = p.y - raton.y;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    var radioInfluencia = 200;
+
+                    if (dist < radioInfluencia && dist > 0) {
+                        var fuerza = (radioInfluencia - dist) / radioInfluencia;
+                        p.x += (dx / dist) * fuerza * 3.5;
+                        p.y += (dy / dist) * fuerza * 3.5;
+                        radio = p.radioBase + fuerza * 3;
+                        color = "rgba(144, 202, 249, " + (0.4 + fuerza * 0.6) + ")";
+                    }
+                }
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, radio, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+            }
+
+            var maxLinea = 140;
+
+            for (var a = 0; a < particulas.length; a++) {
+                for (var b = a + 1; b < particulas.length; b++) {
+                    var pa = particulas[a];
+                    var pb = particulas[b];
+                    var dx2 = pa.x - pb.x;
+                    var dy2 = pa.y - pb.y;
+                    var dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+
+                    if (dist2 < maxLinea) {
+                        var alpha = 1 - dist2 / maxLinea;
+                        ctx.beginPath();
+                        ctx.moveTo(pa.x, pa.y);
+                        ctx.lineTo(pb.x, pb.y);
+                        ctx.strokeStyle = "rgba(144, 202, 249, " + (alpha * 0.7) + ")";
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(dibujar);
+        }
+
+        dibujar();
+    </script>
+</body>
+
+</html>

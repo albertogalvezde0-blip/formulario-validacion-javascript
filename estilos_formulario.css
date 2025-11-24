@@ -1,0 +1,195 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #000 url("imagenfondo.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #222222;
+}
+
+/* Canvas de partículas */
+#bgCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Centrado de la tarjeta */
+.page-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Tarjeta del formulario */
+.form-card {
+    width: 520px;
+    max-width: 100%;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 24px;
+    padding: 28px 32px 26px 32px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+}
+
+.form-card h1 {
+    margin: 0 0 22px 0;
+    font-size: 1.9rem;
+    text-align: center;
+}
+
+/* --------- FILAS DE CAMPOS: label | input | botón --------- */
+.field-row {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr) auto;
+    /* 3 columnas */
+    column-gap: 20px;
+    /* hueco claro entre input y botón */
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.field-label {
+    font-size: 0.96rem;
+}
+
+.field-input {
+    width: 100%;
+}
+
+/* Campo de texto */
+.campo {
+    width: 100%;
+    box-sizing: border-box;
+    /* para que no crezca al poner bordes */
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid #c4c8d0;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+    background-color: #fdfdfd;
+    margin-right: 0;
+    /* por si quedaba algo antiguo */
+}
+
+.campo::placeholder {
+    color: #9ea3af;
+    font-size: 0.9rem;
+}
+
+.campo:focus {
+    outline: none;
+    border-color: #1e88e5;
+    box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.25);
+    background-color: #f5f9ff;
+}
+
+/* Botón "Validar" en su propia columna, separado del input */
+.btn-small {
+    min-width: 90px;
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    border: 1px solid #ced2de;
+    background-color: #f7f7f7;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.05s;
+    margin-left: 0;
+    /* nada de solaparse con el input */
+    text-align: center;
+}
+
+.btn-small:hover {
+    background-color: #e7e7e7;
+    border-color: #b0b4bf;
+    transform: translateY(-1px);
+}
+
+/* --------- FILA DE LOS DOS BOTONES GRANDES --------- */
+.field-row.field-row-buttons {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 18px;
+    margin-top: 18px;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    transition: background-color 0.2s, box-shadow 0.2s, transform 0.05s;
+    justify-self: center;
+    min-width: 190px;
+}
+
+.btn-primary {
+    background-color: #1e88e5;
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.5);
+}
+
+.btn-primary:hover {
+    background-color: #1565c0;
+    box-shadow: 0 8px 20px rgba(21, 101, 192, 0.6);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #f5f5f5;
+    color: #333333;
+    border: 1px solid #c4c8d0;
+}
+
+.btn-secondary:hover {
+    background-color: #e6e6e6;
+}
+
+/* Estilo de error genérico (RA03_f) */
+.campo.errores {
+    border: 2px solid #e53935;
+    background-color: #ffebee;
+    box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.2);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px 0 14px 0;
+    font-size: 0.85rem;
+    color: #f1f5ff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Responsive móvil */
+@media (max-width: 640px) {
+    .form-card {
+        width: 90%;
+        padding: 22px 18px 20px 18px;
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+        row-gap: 6px;
+        align-items: flex-start;
+    }
+
+    .field-row.field-row-buttons {
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+}
